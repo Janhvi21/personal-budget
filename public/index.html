@@ -150,13 +150,7 @@
           {
             data: [],
             backgroundColor: [
-              "#98abc5",
-              "#8a89a6",
-              "#7b6888",
-              "#6b486b",
-              "#a05d56",
-              "#d0743c",
-              "#ff8c00",
+              
             ],
           },
         ],
@@ -164,6 +158,7 @@
       };
       var data = {
         value: [],
+        colors:[],
         labels: [],
       };
       function createChart() {
@@ -177,9 +172,12 @@
         axios.get("http://localhost:3000/budget").then(function (res) {
           for (var i = 0; i < res.data.myBudget.length; i++) {
             dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
+            dataSource.datasets[0].backgroundColor[i] = res.data.myBudget[i].color;
             dataSource.labels[i] = res.data.myBudget[i].title;
             data.value[i] = res.data.myBudget[i].budget;
             data.labels[i] = res.data.myBudget[i].title;
+            data.colors[i] = res.data.myBudget[i].color;
+
           }
           createChart();
           createChartD3();
@@ -199,24 +197,8 @@
 
         var color = d3.scale
           .ordinal()
-          .domain([
-            "Lorem ipsum",
-            "dolor sit",
-            "amet",
-            "consectetur",
-            "adipisicing",
-            "elit",
-            "sed",
-          ])
-          .range([
-            "#98abc5",
-            "#8a89a6",
-            "#7b6888",
-            "#6b486b",
-            "#a05d56",
-            "#d0743c",
-            "#ff8c00",
-          ]);
+          .domain(data.labels)
+          .range(data.colors);
 
         var pie = d3.layout
           .pie()
