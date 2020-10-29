@@ -37,6 +37,7 @@ app.get('/budget', (req, res) => {
                 })
                 .catch((connectionError) => {
                     console.log(connectionError)
+                    res.json("Some Error while retrieving Budget Data");
                 })
         })
         .catch((connectionError) => {
