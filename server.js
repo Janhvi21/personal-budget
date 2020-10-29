@@ -47,21 +47,33 @@ app.get('/budget', (req, res) => {
 
 
 app.post('/addBudget', function (req, res) {
-    console.log(req.body.title,req.body.budget, req.body.color);
-    let newData = new budgetModel({
-        title: req.body.title,
-        budget: req.body.budget,
-        color: req.body.color
-    });
-    budgetModel.insertMany(newData)
-        .then((data) => {
-            console.log(data)
-           // mongoose.connection.close()
-            //res.end("Data Added Successfully");
+    mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
+        .then(() => {
+            console.log("Connected to the database")
+            console.log(req.body.title, req.body.budget, req.body.color);
+            let newData = new budgetModel({
+                title: req.body.title,
+                budget: req.body.budget,
+                color: req.body.color
+            });
+            budgetModel.insertMany(newData)
+                .then((data) => {
+                    console.log(data)
+                    mongoose.connection.close();
+                    res.end("Data Added Successfully");
+                })
+                .catch((connectionError) => {
+                    console.log(connectionError)
+                    res.end("Error: " + connectionError._message);
+                })
         })
         .catch((connectionError) => {
             console.log(connectionError)
         })
+   
 
 });
 

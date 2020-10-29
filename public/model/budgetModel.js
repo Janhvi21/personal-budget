@@ -13,6 +13,7 @@ const budgetSchema = new mongoose.Schema({
     color: {
         type: String,
         trim: true,
+        maxlength: 7,
         required: true
     }
 }, {

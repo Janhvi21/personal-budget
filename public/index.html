@@ -47,8 +47,7 @@
 
     <div class="row">
       <div class="col-md-6">
-        
-       <div id="d3chart" style="height: 500px"></div>
+        <div id="d3chart" style="height: 500px"></div>
       </div>
       <div class="col-md-6">
         <div>
@@ -149,16 +148,14 @@
         datasets: [
           {
             data: [],
-            backgroundColor: [
-              
-            ],
+            backgroundColor: [],
           },
         ],
         labels: [],
       };
       var data = {
         value: [],
-        colors:[],
+        colors: [],
         labels: [],
       };
       function createChart() {
@@ -172,12 +169,12 @@
         axios.get("http://localhost:3000/budget").then(function (res) {
           for (var i = 0; i < res.data.myBudget.length; i++) {
             dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
-            dataSource.datasets[0].backgroundColor[i] = res.data.myBudget[i].color;
+            dataSource.datasets[0].backgroundColor[i] =
+              res.data.myBudget[i].color;
             dataSource.labels[i] = res.data.myBudget[i].title;
             data.value[i] = res.data.myBudget[i].budget;
             data.labels[i] = res.data.myBudget[i].title;
             data.colors[i] = res.data.myBudget[i].color;
-
           }
           createChart();
           createChartD3();
@@ -195,10 +192,7 @@
           height = 400,
           radius = Math.min(width, height) / 2;
 
-        var color = d3.scale
-          .ordinal()
-          .domain(data.labels)
-          .range(data.colors);
+        var color = d3.scale.ordinal().domain(data.labels).range(data.colors);
 
         var pie = d3.layout
           .pie()
@@ -331,19 +325,17 @@
 
           polyline.enter().append("polyline");
 
-          polyline
-            .transition()
-            .attrTween("points", function (d) {
-              this._current = this._current || d;
-              var interpolate = d3.interpolate(this._current, d);
-              this._current = interpolate(0);
-              return function (t) {
-                var d2 = interpolate(t);
-                var pos = outerArc.centroid(d2);
-                pos[0] = radius * 0.97 * (midAngle(d2) < Math.PI ? 1 : -1);
-                return [arc.centroid(d2), outerArc.centroid(d2), pos];
-              };
-            });
+          polyline.transition().attrTween("points", function (d) {
+            this._current = this._current || d;
+            var interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return function (t) {
+              var d2 = interpolate(t);
+              var pos = outerArc.centroid(d2);
+              pos[0] = radius * 0.97 * (midAngle(d2) < Math.PI ? 1 : -1);
+              return [arc.centroid(d2), outerArc.centroid(d2), pos];
+            };
+          });
 
           polyline.exit().remove();
         }
